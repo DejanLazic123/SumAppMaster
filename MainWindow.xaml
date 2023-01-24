@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:SumAppMaster"
         mc:Ignorable="d"
         Title="Potrošnja vazduha pod pritiskom"
-        Height="650"
-        Width="1100"
+        Height="780"
+        Width="1280"
         ResizeMode="CanMinimize"
         WindowStartupLocation="CenterScreen"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -79,37 +79,37 @@
         </Button>
         <TextBox x:Name="txtTime1"
                  HorizontalAlignment="Left"
-                 Margin="830,145,0,0"
+                 Margin="854,93,0,0"
                  TextWrapping="Wrap"
                  VerticalAlignment="Top"
                  Width="120"
                  PreviewTextInput="txtTime1_PreviewTextInput" />
         <TextBox x:Name="txtTime2"
                  HorizontalAlignment="Left"
-                 Margin="830,185,0,0"
+                 Margin="854,133,0,0"
                  TextWrapping="Wrap"
                  VerticalAlignment="Top"
                  Width="120"
                  PreviewTextInput="txtTime2_PreviewTextInput" />
         <Label Content="Izaberi vremenski interval"
                HorizontalAlignment="Left"
-               Margin="704,111,0,0"
+               Margin="728,59,0,0"
                VerticalAlignment="Top"
                FontSize="17"
                RenderTransformOrigin="0.361,1.253" />
         <Label Content="s"
                FontSize="17"
                HorizontalAlignment="Left"
-               Margin="955,147,0,0"
+               Margin="979,95,0,0"
                VerticalAlignment="Top" />
         <Label Content="s"
                FontSize="17"
                HorizontalAlignment="Left"
-               Margin="955,186,0,0"
+               Margin="979,134,0,0"
                VerticalAlignment="Top" />
         <DataGrid x:Name="dataGridView1"
                   d:ItemsSource="{d:SampleData ItemCount=5}"
-                  Margin="21,83,819,22"
+                  Margin="21,83,890,22"
                   Background="White"
                   IsReadOnly="True"
                   GridLinesVisibility="All"
@@ -127,7 +127,7 @@
         <Button x:Name="btnPotvrda"
                 Content="Potvrda"
                 HorizontalAlignment="Left"
-                Margin="704,229,0,0"
+                Margin="728,177,0,0"
                 Height="35"
                 Width="111"
                 VerticalAlignment="Top"
@@ -135,30 +135,31 @@
         <Label x:Name="lblResault"
                Content=""
                HorizontalAlignment="Left"
-               Margin="735,346,0,0"
+               Margin="764,250,0,0"
                FontSize="20"
                VerticalAlignment="Top" />
         <Label Content="Ukupna potrošnja vazduha u datom intervalu"
                HorizontalAlignment="Left"
-               Margin="704,0,0,0"
-               VerticalAlignment="Center"
+               Margin="718,217,0,0"
+               VerticalAlignment="Top"
                FontSize="17" />
         <Label Content="Σ"
                HorizontalAlignment="Left"
-               Margin="712,346,0,0"
+               Margin="728,250,0,0"
                VerticalAlignment="Top"
                Height="34"
                Width="27"
                FontSize="20"
-               IsEnabled="False" />
+               IsEnabled="False"
+               RenderTransformOrigin="0.599,-0.308" />
         <Label Content="Početno vreme"
                HorizontalAlignment="Left"
-               Margin="704,148,0,0"
+               Margin="728,96,0,0"
                VerticalAlignment="Top"
                FontSize="17" />
         <Label Content="Završno vreme"
                HorizontalAlignment="Left"
-               Margin="704,187,0,0"
+               Margin="728,135,0,0"
                VerticalAlignment="Top"
                FontSize="17" />
         <Button x:Name="btnTable"
@@ -216,5 +217,11 @@
 
 
         </Button>
+        <WpfPlot x:Name="plogGraph"
+                 HorizontalAlignment="Left"
+                 Margin="395,324,0,0"
+                 VerticalAlignment="Top"
+                 Height="418"
+                 Width="875" />
     </Grid>
 </Window>

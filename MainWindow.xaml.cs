@@ -21,6 +21,19 @@ namespace SumAppMaster
 {
     public partial class MainWindow : Window
     {
+        private object txtFilename;
+
+        public List<Podatak> podaci = new List<Podatak>();
+
+
+        DataTable dt;
+
+        public List<double> time= new List<double>();
+        public List<double> value = new List<double>();
+
+
+
+
         public MainWindow()
         {
             InitializeComponent();
@@ -29,24 +42,8 @@ namespace SumAppMaster
             dt.Columns.Add("Potrošnja (l/min)");
             dataGridView1.ItemsSource = dt.DefaultView;
 
-            /*   //chart
-               SfChart chart = new SfChart();
-               chart.Header = "Chart";
-               CategoryAxis primaryAxis = new CategoryAxis();
-               primaryAxis.Header = "Name";
-               primaryAxis.FontSize = 14;
-               chart.PrimaryAxis = primaryAxis;
-
-               NumericalAxis secondaryAxis = new NumericalAxis();
-               secondaryAxis.Header = "Height(in cm)";
-               secondaryAxis.FontSize = 14;
-               chart.SecondaryAxis = secondaryAxis;
-               ColumnSeries columnSeries = new ColumnSeries();
-               columnSeries.XBindingPath = "Name";
-               columnSeries.YBindingPath = "Height";
-               columnSeries.ItemsSource = (chart.DataContext as ViewModel).Data;
-               columnSeries.Label = "Height";
-               chart.Series.Add(columnSeries);*/
+          
+            
         }
 
 
@@ -55,12 +52,7 @@ namespace SumAppMaster
             public string Vreme { get; set; }
             public string Vrednost { get; set; }
         }
-        private object txtFilename;
-
-        public List<Podatak> podaci = new List<Podatak>();
-
-
-        DataTable dt;
+       
         private void PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             Regex regex = new Regex("^[.][0-9]+$|^[0-9]*[.]{0,1}[0-9]*$");
@@ -96,18 +88,38 @@ namespace SumAppMaster
                             Vrednost = doc.GetCellValueAsString(i, 2),
                         });
 
+                        time.Add(double.Parse(podaci[i - 2].Vreme));
+                        value.Add(double.Parse(podaci[i - 2].Vrednost));
+
+/*
                         DataRow dr = dt.NewRow();
 
                         dr[0] = podaci[i - 2].Vreme.ToString();
                         dr[1] = podaci[i - 2].Vrednost.ToString();
 
-                        dt.Rows.Add(dr);
+                        dt.Rows.Add(dr);*/
                         MaterialDesignThemes.Wpf.ButtonProgressAssist.SetIsIndeterminate(btnUpload, false);
 
 
 
                     }
 
+                    dataGridView1.ItemsSource= podaci;
+
+                    double[] t= new double[time.Count];
+                    double[] v = new double[value.Count];
+
+                    for (int i = 0; i < time.Count; i++)
+                    {
+                        t[i]=time[i];
+                        v[i]=value[i];
+
+                    }
+
+
+                    plogGraph.Plot.AddScatter(t, v);
+
+                    plogGraph.Refresh();
 
                 }
                 else
@@ -156,8 +168,17 @@ namespace SumAppMaster
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
-            dt.Clear();
+            dataGridView1.DataContext="";
+            
             podaci.Clear();
+            dataGridView1.ItemsSource = "";
+            /* 
+             double[] t = new double[time.Count];
+             double[] v = new double[value.Count];
+             plogGraph.Plot.AddScatter(t,v);
+             plogGraph.Refresh();*/
+
+
             lblFileName.Content = "";
             lblResault.Content = "";
             txtTime1.Text = "";
