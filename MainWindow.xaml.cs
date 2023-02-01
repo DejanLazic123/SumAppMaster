@@ -1,4 +1,7 @@
-﻿using Microsoft.Win32;
+﻿using DocumentFormat.OpenXml.Math;
+using Microsoft.Win32;
+using ScottPlot;
+using ScottPlot.Plottable;
 using SpreadsheetLight;
 using System;
 using System.Collections.Generic;
@@ -25,6 +28,10 @@ namespace SumAppMaster
 
         public List<Podatak> podaci = new List<Podatak>();
 
+        dynamic backLine;
+
+        dynamic frontLine;
+
 
         DataTable dt;
 
@@ -41,9 +48,12 @@ namespace SumAppMaster
             dt.Columns.Add("Vreme (s)");
             dt.Columns.Add("Potrošnja (l/min)");
             dataGridView1.ItemsSource = dt.DefaultView;
-
-          
+            txtTime1.Text = "0";
+            txtTime2.Text = "0";
             
+
+
+
         }
 
 
@@ -62,14 +72,53 @@ namespace SumAppMaster
         }
 
 
+        public void DrawGraph(List<double> t1, List<double> v1)
+        {
+            double[] t = new double[t1.Count];
+            double[] v = new double[v1.Count];
 
+            for (int i = 0; i < t1.Count; i++)
+            {
+                t[i] = t1[i];
+                v[i] = v1[i];
+
+            }
+
+            plogGraph.Plot.AddScatter(t, v);
+
+            frontLine = plogGraph.Plot.AddVerticalLine(t[0]);
+            frontLine.LineWidth = 2;
+            frontLine.DragEnabled = true;
+            frontLine.DragLimitMin = 0;
+            frontLine.DragLimitMax = t[t.Length - 1];
+            frontLine.PositionLabel = true;
+            frontLine.Label = "Početno vreme";
+
+
+            backLine = plogGraph.Plot.AddVerticalLine(t[t.Length-1]);
+            backLine.DragEnabled = true;
+            backLine.LineWidth = 2;
+            backLine.DragLimitMin = 0;
+            backLine.DragLimitMax = t[t.Length - 1];
+            backLine.PositionLabel = true;
+            backLine.Label = "Krajnje vreme";
+            plogGraph.Plot.Legend(true);
+
+            plogGraph.Plot.Title("Grafik potrošnje");
+            plogGraph.Plot.XLabel("Vreme(sec)");
+            plogGraph.Plot.YLabel("Potrošnja\n (l/min)");
+
+
+            plogGraph.Refresh();
+        }
 
         private void btnUpload_Click(object sender, RoutedEventArgs e)
         {
 
+            if (lblFileName.Content == "")        
             {
                 OpenFileDialog openFileDialog = new OpenFileDialog();
-
+               
                 openFileDialog.ShowDialog();
                 if (openFileDialog.FileName != "")
                 {
@@ -91,36 +140,13 @@ namespace SumAppMaster
                         time.Add(double.Parse(podaci[i - 2].Vreme));
                         value.Add(double.Parse(podaci[i - 2].Vrednost));
 
-/*
-                        DataRow dr = dt.NewRow();
-
-                        dr[0] = podaci[i - 2].Vreme.ToString();
-                        dr[1] = podaci[i - 2].Vrednost.ToString();
-
-                        dt.Rows.Add(dr);*/
                         MaterialDesignThemes.Wpf.ButtonProgressAssist.SetIsIndeterminate(btnUpload, false);
 
-
-
                     }
-
                     dataGridView1.ItemsSource= podaci;
 
-                    double[] t= new double[time.Count];
-                    double[] v = new double[value.Count];
-
-                    for (int i = 0; i < time.Count; i++)
-                    {
-                        t[i]=time[i];
-                        v[i]=value[i];
-
-                    }
-
-
-                    plogGraph.Plot.AddScatter(t, v);
-
-                    plogGraph.Refresh();
-
+                    DrawGraph(time, value);
+                    
                 }
                 else
                 {
@@ -128,10 +154,15 @@ namespace SumAppMaster
 
                 }
             }
+            else
+            {
+                lblFileName.Content = "Fajl je već učitan";
+            }
         }
 
         private void btnPotvrda_Click(object sender, RoutedEventArgs e)
         {
+
             if (txtTime1.Text == "" || txtTime2.Text == "")
             {
                 MessageBox.Show("Popunite oba polja!");
@@ -171,13 +202,14 @@ namespace SumAppMaster
             dataGridView1.DataContext="";
             
             podaci.Clear();
+            time.Clear();
+            value.Clear();
             dataGridView1.ItemsSource = "";
-            /* 
-             double[] t = new double[time.Count];
-             double[] v = new double[value.Count];
-             plogGraph.Plot.AddScatter(t,v);
-             plogGraph.Refresh();*/
+            MaterialDesignThemes.Wpf.ButtonProgressAssist.SetIsIndeterminate(btnUpload, true);
 
+            plogGraph.Plot.Clear();
+            plogGraph.DataContext = null;
+            plogGraph.Refresh();
 
             lblFileName.Content = "";
             lblResault.Content = "";
@@ -190,6 +222,8 @@ namespace SumAppMaster
             Regex regex = new Regex("^[.][0-9]+$|^[0-9]*[.]{0,1}[0-9]*$");
 
             e.Handled = !regex.IsMatch((sender as TextBox).Text.Insert((sender as TextBox).SelectionStart, e.Text));
+
+          
         }
 
         private void txtTime2_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -197,16 +231,97 @@ namespace SumAppMaster
             Regex regex = new Regex("^[.][0-9]+$|^[0-9]*[.]{0,1}[0-9]*$");
 
             e.Handled = !regex.IsMatch((sender as TextBox).Text.Insert((sender as TextBox).SelectionStart, e.Text));
+
+           
         }
 
-        private void btnTable_Click(object sender, RoutedEventArgs e)
+
+        private void dataGridView1_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            Podatak selected = (Podatak)dataGridView1.SelectedItem;
+
+
+            if (double.Parse(txtTime1.Text) ==0)
+            {
+                txtTime1.Text = selected.Vreme;
+                
+            } else if (double.Parse(txtTime1.Text)< double.Parse(selected.Vreme)) 
+            {
+                txtTime2.Text = selected.Vreme;
+            }
+            else if (double.Parse(txtTime1.Text) > double.Parse(selected.Vreme))
+            {
+                txtTime1.Text = selected.Vreme;
+               
+
+            }
+            UpdateGraph();
+
 
         }
 
-        private void btnChart_Click(object sender, RoutedEventArgs e)
-        {
 
+        private void plogGraph_PlottableDragged(object sender, EventArgs e)
+        {
+           
+
+            double tb = backLine.X;
+
+            double tf = frontLine.X;
+
+            if (tb < tf)
+            {
+                frontLine.X = tf-0.01;
+                backLine.X=tf;
+
+                plogGraph.Refresh();
+            }
+
+
+            txtTime1.Text = frontLine.X.ToString("0.###");
+            txtTime2.Text =  backLine.X.ToString("0.###");
+
+
+        }
+
+        private void txtTime1_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (time.Count>0)
+            {
+                if (!string.IsNullOrEmpty(txtTime1.Text) && double.Parse(txtTime1.Text) < backLine.X)
+                {
+                    frontLine.X = double.Parse(txtTime1.Text);
+                    plogGraph.Refresh();
+                }
+            }
+          
+        }
+
+        public void UpdateGraph()
+        {
+            if (!string.IsNullOrEmpty(txtTime1.Text) && double.Parse(txtTime1.Text) < backLine.X)
+            {
+                frontLine.X = double.Parse(txtTime1.Text);
+                
+            }
+            if (!string.IsNullOrEmpty(txtTime2.Text) && frontLine.X < double.Parse(txtTime2.Text))
+            {
+                backLine.X = double.Parse(txtTime2.Text);
+               
+            }
+            plogGraph.Refresh();
+        }
+
+        private void txtTime2_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (time.Count > 0)
+            {
+                if (!string.IsNullOrEmpty(txtTime2.Text) && frontLine.X < double.Parse(txtTime2.Text))
+                {
+                    backLine.X = double.Parse(txtTime2.Text);
+                    plogGraph.Refresh();
+                }
+            }
         }
     }
 }

@@ -24,7 +24,7 @@
         <Button x:Name="btnUpload"
                 HorizontalAlignment="Left"
                 Style="{StaticResource MaterialDesignRaisedSecondaryDarkButton}"
-                Margin="10,10,0,0"
+                Margin="21,10,0,0"
                 VerticalAlignment="Top"
                 Background="Green"
                 Height="50"
@@ -53,7 +53,7 @@
 
         <Button x:Name="btnDelete"
                 HorizontalAlignment="Left"
-                Margin="476,10,0,0"
+                Margin="173,10,0,0"
                 VerticalAlignment="Top"
                 Height="50"
                 Width="140"
@@ -79,73 +79,76 @@
         </Button>
         <TextBox x:Name="txtTime1"
                  HorizontalAlignment="Left"
-                 Margin="854,93,0,0"
+                 Margin="592,65,0,0"
                  TextWrapping="Wrap"
                  VerticalAlignment="Top"
                  Width="120"
-                 PreviewTextInput="txtTime1_PreviewTextInput" />
+                 PreviewTextInput="txtTime1_PreviewTextInput"
+                 KeyUp="txtTime1_KeyUp" />
         <TextBox x:Name="txtTime2"
                  HorizontalAlignment="Left"
-                 Margin="854,133,0,0"
+                 Margin="592,105,0,0"
                  TextWrapping="Wrap"
                  VerticalAlignment="Top"
                  Width="120"
-                 PreviewTextInput="txtTime2_PreviewTextInput" />
+                 PreviewTextInput="txtTime2_PreviewTextInput"
+                 KeyUp="txtTime2_KeyUp" />
         <Label Content="Izaberi vremenski interval"
                HorizontalAlignment="Left"
-               Margin="728,59,0,0"
+               Margin="467,31,0,0"
                VerticalAlignment="Top"
                FontSize="17"
                RenderTransformOrigin="0.361,1.253" />
         <Label Content="s"
                FontSize="17"
                HorizontalAlignment="Left"
-               Margin="979,95,0,0"
+               Margin="718,67,0,0"
                VerticalAlignment="Top" />
         <Label Content="s"
                FontSize="17"
                HorizontalAlignment="Left"
-               Margin="979,134,0,0"
+               Margin="718,106,0,0"
                VerticalAlignment="Top" />
         <DataGrid x:Name="dataGridView1"
-                  d:ItemsSource="{d:SampleData ItemCount=5}"
-                  Margin="21,83,890,22"
+                  d:ItemsSource="{d:SampleData ItemCount=15}"
+                  Margin="21,83,996,22"
                   Background="White"
+                  CanUserSortColumns="False"
                   IsReadOnly="True"
                   GridLinesVisibility="All"
                   ColumnHeaderHeight="{Binding Effect, ElementName=dataGridView1}"
                   AlternatingRowBackground="#FFF1F1F1"
-                  BorderBrush="{x:Null}" />
-
+                  BorderBrush="{x:Null}"
+                  MouseDoubleClick="dataGridView1_MouseDoubleClick" />
 
 
         <Label x:Name="lblFileName"
-               Content="Ruta:"
+               Content=""
                HorizontalAlignment="Left"
-               Margin="9,61,0,0"
+               Margin="15,61,0,0"
                VerticalAlignment="Top" />
         <Button x:Name="btnPotvrda"
                 Content="Potvrda"
                 HorizontalAlignment="Left"
-                Margin="728,177,0,0"
+                Margin="466,150,0,0"
                 Height="35"
-                Width="111"
+                Width="269"
                 VerticalAlignment="Top"
                 Click="btnPotvrda_Click" />
         <Label x:Name="lblResault"
                Content=""
                HorizontalAlignment="Left"
-               Margin="764,250,0,0"
+               Margin="896,81,0,0"
                FontSize="20"
                VerticalAlignment="Top" />
-        <Label Content="Ukupna potrošnja vazduha u datom intervalu"
+        <Label Content="Ukupna potrošnja vazduha&#xD;&#xA;   u izabranom intervalu"
                HorizontalAlignment="Left"
-               Margin="718,217,0,0"
+               Margin="833,31,0,0"
                VerticalAlignment="Top"
                FontSize="17" />
         <Label Content="Σ"
                HorizontalAlignment="Left"
-               Margin="728,250,0,0"
+               Margin="860,81,0,0"
                VerticalAlignment="Top"
                Height="34"
                Width="27"
@@ -154,74 +157,27 @@
                RenderTransformOrigin="0.599,-0.308" />
         <Label Content="Početno vreme"
                HorizontalAlignment="Left"
-               Margin="728,96,0,0"
+               Margin="466,68,0,0"
                VerticalAlignment="Top"
                FontSize="17" />
         <Label Content="Završno vreme"
                HorizontalAlignment="Left"
-               Margin="728,135,0,0"
+               Margin="466,107,0,0"
                VerticalAlignment="Top"
                FontSize="17" />
-        <Button x:Name="btnTable"
-                HorizontalAlignment="Left"
-                Style="{StaticResource MaterialDesignRaisedSecondaryDarkButton}"
-                Margin="320                 ,10,0,0"
-                VerticalAlignment="Top"
-                Background="Orange"
-                Height="50"
-                Width="140"
-                Cursor="Hand"
-                BorderBrush="Orange"
-                Click="btnTable_Click">
-
-            <StackPanel Orientation="Horizontal">
-                <materialDesign:PackIcon Width="25"
-                                         Height="27"
-                                         Kind="Table"
-                                         HorizontalAlignment="Center"
-                                         VerticalAlignment="Center" />
-
-                <Label BorderThickness="0"
-                       FontStyle="Normal"
-                       Foreground="White"
-                       Content="Tabelarni &#xA;  prikaz" />
-            </StackPanel>
-
-
-
-        </Button>
-        <Button x:Name="btnChart"
-                HorizontalAlignment="Left"
-                Style="{StaticResource MaterialDesignRaisedSecondaryDarkButton}"
-                Margin="165,10,0,0"
-                VerticalAlignment="Top"
-                Background="Goldenrod"
-                Height="50"
-                Width="140"
-                Cursor="Hand"
-                BorderBrush="Goldenrod"
-                Click="btnChart_Click">
-
-            <StackPanel Orientation="Horizontal">
-                <materialDesign:PackIcon Width="25"
-                                         Height="27"
-                                         Kind="ChartLine"
-                                         VerticalAlignment="Center" />
-
-                <Label BorderThickness="0"
-                       FontStyle="Normal"
-                       Foreground="White"
-                       Content="Grafički &#xA; prikaz" />
-            </StackPanel>
-
-
-
-        </Button>
+       
         <WpfPlot x:Name="plogGraph"
                  HorizontalAlignment="Left"
-                 Margin="395,324,0,0"
+                 Margin="329,216,0,0"
                  VerticalAlignment="Top"
-                 Height="418"
-                 Width="875" />
+                    
+                 Height="514"
+                 Width="941"
+                 PlottableDragged="plogGraph_PlottableDragged" />
+        <Label Content="l/min"
+               HorizontalAlignment="Left"
+               Margin="967,85,0,0"
+               VerticalAlignment="Top"
+               FontSize="17" />
     </Grid>
 </Window>
